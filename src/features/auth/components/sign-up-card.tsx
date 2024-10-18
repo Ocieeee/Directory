@@ -27,10 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../schemas";
 import { useRegister } from "../api/use-register";
 
-
-
 const SignUpCard = () => {
-  const { mutate } = useRegister()
+  const { mutate, isPending } = useRegister();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -42,7 +40,7 @@ const SignUpCard = () => {
   });
 
   const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    mutate({json: values});
+    mutate({ json: values });
   };
 
   return (
@@ -117,7 +115,7 @@ const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button disabled={false} size={"lg"} className="w-full">
+            <Button disabled={isPending} size={"lg"} className="w-full">
               Sign Up
             </Button>
           </form>
