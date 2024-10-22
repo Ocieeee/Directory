@@ -6,8 +6,8 @@ import { client } from "@/lib/rpc";
 
 
 
-type ResponseType = InferResponseType<(typeof client.api.workspaces)["$post"]>;
-type RequestType = InferRequestType<(typeof client.api.workspaces)["$post"]>;
+type ResponseType = InferResponseType<typeof client.api.workspaces["$post"]>;
+type RequestType = InferRequestType<typeof client.api.workspaces["$post"]>;
 
 export const useCreateWorkspace = () => {
 
