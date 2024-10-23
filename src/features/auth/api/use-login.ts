@@ -5,8 +5,8 @@ import { toast } from "sonner";
 import { client } from "@/lib/rpc";
 import { useRouter } from "next/navigation";
 
-type ResponseType = InferResponseType<(typeof client.api.auth.login)["$post"]>;
-type RequestType = InferRequestType<(typeof client.api.auth.login)["$post"]>;
+type ResponseType = InferResponseType<typeof client.api.auth.login["$post"]>;
+type RequestType = InferRequestType<typeof client.api.auth.login["$post"]>;
 
 export const useLogin = () => {
   const router = useRouter()
@@ -22,7 +22,7 @@ export const useLogin = () => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Login succesfull")
+      toast.success("Login succesfully")
       router.refresh()
       queryClient.invalidateQueries({ queryKey: ["current"] })
     },

@@ -55,7 +55,7 @@ export const JoinWorkspaceForm = ({
         <DottedSeparator />
       </div>
       <CardContent className="p-7">
-        <div className="flex flex-col lg:flow-row gap-2 items-center justify-between">
+        <div className="flex flex-col lg:flex-row gap-2 items-center justify-between">
           <Button
             variant={"secondary"}
             typeof="button"
