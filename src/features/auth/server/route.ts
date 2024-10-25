@@ -15,27 +15,28 @@ const app = new Hono()
     "/current", sessionMiddleware, (c) => {
       const user = c.get("user")
 
-      return c.json({ data: user})
+      return c.json({ data: user })
     }
   )
-  .post("/login", 
-    zValidator("json", loginSchema), 
+
+  .post("/login",
+    zValidator("json", loginSchema),
     async (c) => {
       const { email, password } = c.req.valid("json")
 
-      const { account }  = await createAdminClient()
+      const { account } = await createAdminClient()
       const session = await account.createEmailPasswordSession(
-         email,
-         password
+        email,
+        password
       )
       setCookie(c, AUTH_COOKIE, session.secret, {
-        path:"/",
+        path: "/",
         httpOnly: true,
-        secure : true,
+        secure: true,
         sameSite: "strict",
-        maxAge: 60*60*24*30
+        maxAge: 60 * 60 * 24 * 30
       })
-     return c.json({ success:true });
+      return c.json({ success: true });
     }
   )
   .post(
@@ -56,21 +57,21 @@ const app = new Hono()
         password
       )
       setCookie(c, AUTH_COOKIE, session.secret, {
-        path:"/",
+        path: "/",
         httpOnly: true,
-        secure : true,
+        secure: true,
         sameSite: "strict",
-        maxAge: 60*60*24*30
+        maxAge: 60 * 60 * 24 * 30
       })
-     return c.json({ success:true });
+      return c.json({ success: true });
     }
   )
-  .post("/logout",sessionMiddleware , async (c) => {
-      const account = c.get("account")
+  .post("/logout", sessionMiddleware, async (c) => {
+    const account = c.get("account")
 
-      deleteCookie(c, AUTH_COOKIE)
-      await account.deleteSession("current")
+    deleteCookie(c, AUTH_COOKIE)
+    await account.deleteSession("current")
 
-      return c.json({ success: true})
+    return c.json({ success: true })
   })
 export default app;

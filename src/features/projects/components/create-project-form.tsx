@@ -11,7 +11,7 @@ import { useCreateProject } from "../api/use-create-project";
 
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,7 @@ interface CreateProjectFormProp {
 
 export const CreateProjectForm = ({ onCancel }: CreateProjectFormProp) => {
   const workspaceId = useWorkspaceId();
-  // const router = useRouter();
+  const router = useRouter();
   const { mutate, isPending } = useCreateProject();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,9 +58,9 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProp) => {
     mutate(
       { form: finalValues },
       {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
           form.reset();
-          // router.push(`/workspaces/${data.$id}`);
+          router.push(`/workspaces/${workspaceId}/projects/${data.$id}`);
         },
       }
     );
