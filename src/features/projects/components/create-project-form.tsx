@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DottedSeparator } from "@/components/dotted-separator";
 
 import { useForm } from "react-hook-form";
-import { useCreateProject } from "../api/use-create-project";
 
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
@@ -29,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { createProjectSchema } from "../schema";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useCreateProject } from "@/features/tasks/api/use-create-task";
 
 interface CreateProjectFormProp {
   onCancel?: () => void;
