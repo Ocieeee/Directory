@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { createTaskSchema } from "../schemas";
 import { getMember } from "@/features/members/util";
-import { DATABASE_ID, MEMBERS_ID, PROJECT_ID, TASK_ID } from "@/config";
+import { DATABASE_ID, MEMBERS_ID, PROJECT_ID, TASKS_ID } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { z } from "zod";
 import { TaskStatus } from "../types";
@@ -13,11 +13,11 @@ import { Project } from "@/features/projects/type";
 const app = new Hono()
     .get("/", sessionMiddleware,
         zValidator("query", z.object({
-            status: z.nativeEnum(TaskStatus).nullish(),
             workspaceId: z.string(),
             projectId: z.string().nullish(),
-            dueDate: z.string().nullish(),
             assigneeId: z.string().nullish(),
+            status: z.nativeEnum(TaskStatus).nullish(),
+            dueDate: z.string().nullish(),
             search: z.string().nullish()
         })
         ),
@@ -46,8 +46,8 @@ const app = new Hono()
             }
 
             const query = [
-                Query.equal("workspaceID", workspaceId),
-                Query.orderAsc("$createdAt"),
+                Query.equal("workspaceId", workspaceId),
+                Query.orderDesc("$createdAt"),
             ]
 
             if (projectId) {
@@ -72,7 +72,7 @@ const app = new Hono()
 
             const tasks = await databases.listDocuments(
                 DATABASE_ID,
-                TASK_ID,
+                TASKS_ID,
                 query
             )
 
@@ -105,11 +105,11 @@ const app = new Hono()
 
             const populatedTasks = tasks.documents.map((task) => {
                 const project = projects.documents.find(
-                    (project) => project.$id == task.projectId
+                    (project) => project.$id === task.projectId
                 )
 
                 const assignee = assignees.find(
-                    (assignee) => assignee.$id == task.assigneeId
+                    (assignee) => assignee.$id === task.assigneeId
                 )
 
                 return {
@@ -156,11 +156,11 @@ const app = new Hono()
 
             const highestPositionTask = await databases.listDocuments(
                 DATABASE_ID,
-                TASK_ID,
+                TASKS_ID,
                 [
                     Query.equal("status", status),
-                    Query.equal("workspaceID", workspaceId),
-                    Query.orderAsc("positon"),
+                    Query.equal("workspaceId", workspaceId),
+                    Query.orderDesc("position"),
                     Query.limit(1),
                 ]
             )
@@ -172,7 +172,7 @@ const app = new Hono()
 
             const task = await databases.createDocument(
                 DATABASE_ID,
-                TASK_ID,
+                TASKS_ID,
                 ID.unique(),
                 {
                     name,
@@ -181,7 +181,7 @@ const app = new Hono()
                     projectId,
                     dueDate,
                     assigneeId,
-                    positon: newPosition
+                    position: newPosition
                 }
             )
 
@@ -190,6 +190,4 @@ const app = new Hono()
 
     )
 
-
 export default app
-

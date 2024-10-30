@@ -28,7 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { createProjectSchema } from "../schema";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
-import { useCreateProject } from "@/features/tasks/api/use-create-task";
+import { useCreateProject } from "../api/use-create-project";
 
 interface CreateProjectFormProp {
   onCancel?: () => void;

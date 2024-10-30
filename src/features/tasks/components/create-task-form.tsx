@@ -1,21 +1,14 @@
 "use client";
 
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useCreateTask } from "../api/use-create-task";
+import { createTaskSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { DottedSeparator } from "@/components/dotted-separator";
-
-import { useForm } from "react-hook-form";
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-import { cn } from "@/lib/utils";
-import { createTaskSchema } from "../schemas";
-import { useCreateTask } from "@/features/projects/api/use-create-project";
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
-import { DatePicker } from "@/components/date-picker";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -32,6 +25,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { DatePicker } from "@/components/date-picker";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { TaskStatus } from "../types";
 import { ProjecteAvatar } from "@/features/projects/components/project-avatar";
@@ -187,7 +184,7 @@ export const CreateTaskForm = ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Assignee</FormLabel>
+                      <FormLabel>Project</FormLabel>
                       <Select
                         defaultValue={field.value}
                         onValueChange={field.onChange}

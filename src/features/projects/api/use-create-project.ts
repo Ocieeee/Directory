@@ -5,28 +5,28 @@ import { InferRequestType, InferResponseType } from "hono";
 import { client } from "@/lib/rpc";
 
 
-type ResponseType = InferResponseType<typeof client.api.tasks["$post"], 200>;
-type RequestType = InferRequestType<typeof client.api.tasks["$post"]>;
+type ResponseType = InferResponseType<typeof client.api.projects["$post"], 200>;
+type RequestType = InferRequestType<typeof client.api.projects["$post"]>;
 
-export const useCreateTask = () => {
+export const useCreateProject = () => {
 
   const queryClient = useQueryClient();
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json }) => {
-      const response = await client.api.tasks["$post"]({ json });
+    mutationFn: async ({ form }) => {
+      const response = await client.api.projects["$post"]({ form });
 
       if (!response.ok) {
-        throw new Error("Failed to create task")
+        throw new Error("Failed to create project")
       }
 
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Task created")
-      queryClient.invalidateQueries({ queryKey: ["tasks"] })
+      toast.success("Project created")
+      queryClient.invalidateQueries({ queryKey: ["projects"] })
     },
     onError: () => {
-      toast.error("Failed to create task")
+      toast.error("Failed to create project")
     }
   });
 
